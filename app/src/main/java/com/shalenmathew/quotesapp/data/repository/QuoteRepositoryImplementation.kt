@@ -124,10 +124,10 @@ class QuoteRepositoryImplementation(private val api: QuoteApi, private val db: Q
 
     override suspend fun refreshIfAllDisplayed(): Resource<List<Quote>> {
         val undisplayedCount = db.getQuoteDao().getUndisplayedCount()
-        return if (undisplayedCount == 0) {
-            Resource.Success(emptyList())
-        } else {
+        return if (undisplayedCount > 0) {
             Resource.Success(db.getQuoteDao().getUndisplayedQuotes())
+        } else {
+            Resource.Success(emptyList())
         }
     }
 }
